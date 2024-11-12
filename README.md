@@ -7,7 +7,7 @@ Tested with the keylight model.
 
 ## Nix Flake
 ```shell
-nix run github:hughobrien/elgato-rs
+$ nix run github:hughobrien/elgato-rs
 ```
 
 ## Build
@@ -37,6 +37,16 @@ Now I hold down two modifier keys, and four of the keys in the island above the 
 
 
 ## FAQ
+### How big is the binary?
+```
+$ eza -l ./target/release/elgato-rs
+.rwxr-xr-x 2.6M hugh 11 Nov 20:36 ./target/release/elgato-rs
+
+$ strip ./target/release/elgato-rs 
+$ eza -l ./target/release/elgato-rs
+.rwxr-xr-x 2.2M hugh 11 Nov 21:35 ./target/release/elgato-rs
+```
+
 ### Have you benchmarked this?
 That would be insane
 ```
