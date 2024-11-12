@@ -44,6 +44,9 @@ Now I hold down two modifier keys, and four of the keys in the island above the 
 ### Does this support dark mode?
 Stop it.
 
+### Does this support multiple lights?
+Not presently, you can probably just loop the command over the different endpoints in shell for now.
+
 ### How big is the binary?
 ```
 $ eza -l ./target/release/elgato-rs
