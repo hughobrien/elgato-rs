@@ -49,3 +49,7 @@ Benchmark 1: python elgato.py up
 Time (mean ± σ):     330.7 ms ±  16.3 ms    [User: 198.4 ms, System: 22.5 ms]
 Range (min … max):   314.2 ms … 364.0 ms    10 runs
 ```
+
+### How does this compare to the state of the art in Elgato Control?
+* It [https://github.com/frenck/python-elgato](pales in comparison) to this Python library
+* It has no pretty UI compared to [https://github.com/mschneider82/keylight-control](this nice utility)
