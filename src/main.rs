@@ -29,7 +29,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await?;
 
     if let Some(mut light) = lights_response.lights.first().cloned() {
-        adjust_light(&mut light, command);
+        adjust_light(&mut light, &command);
 
         let req_body = LightsResponse {
             numberOfLights: lights_response.numberOfLights,
@@ -44,19 +44,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn parse_args(args: Vec<String>) -> Result<(String, &'static str), &'static str> {
+fn parse_args(args: Vec<String>) -> Result<(String, String), &'static str> {
+    const VALID_COMMANDS: &[&str] = &["bright", "dim", "warm", "cold"];
+    let error_message = "Usage: elgato-rs http://elgato.lan:9123/elgato/lights <bright|dim|warm|cold>";
+
     if args.len() == 3 {
         let url = args[1].clone();
-        let command = match args[2].as_str() {
-            "bright" => "bright",
-            "dim" => "dim",
-            "warm" => "warm",
-            "cold" => "cold",
-            _ => return Err("Usage: <program> <url> <bright|dim|warm|cold>"),
-        };
-        Ok((url, command))
+        let command = args[2].clone();
+
+        if VALID_COMMANDS.contains(&command.as_str()) {
+            Ok((url, command))
+        } else {
+            Err(error_message)
+        }
     } else {
-        Err("Usage: <program> <url> <bright|dim|warm|cold>")
+        Err(error_message)
     }
 }
 
