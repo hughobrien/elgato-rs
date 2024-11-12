@@ -90,6 +90,7 @@ fn adjust_light(light: &mut Light, command: &str) {
                     .max(BRIGHTNESS_MIN);
             } else {
                 light.on = 1;
+                light.brightness = light.brightness.max(BRIGHTNESS_MIN);
             };
         }
         "bright-" => {

@@ -33,6 +33,8 @@ bindsym --no-repeat $mod+Shift+Prior exec $elgato-rs $elgato-url bright+
 bindsym --no-repeat $mod+Shift+Next exec $elgato-rs $elgato-url bright-
 bindsym --no-repeat $mod+Shift+Home exec $elgato-rs $elgato-url temp+
 bindsym --no-repeat $mod+Shift+End exec $elgato-rs $elgato-url temp-
+bindsym --no-repeat $mod+Shift+Alt+Prior exec $elgato-rs $elgato-url on
+bindsym --no-repeat $mod+Shift+Alt+Next exec $elgato-rs $elgato-url off
 ```
 
 Prior==PgUp and Next==PgDown.
@@ -43,7 +45,7 @@ Now I hold down two modifier keys, and four of the keys in the island above the 
 |    |     Light On        |     Light Off                       |
 |----|---------------------|-------------------------------------|
 | B+ | Increase Brightness | Turn Light On (previous brightness) |
-| B- | Decrease Brightness | Chill Brightness                    |
+| B- | Decrease Brightness | Min Brightness                    |
 | T+ | Increase Warmth     | Max Brightness                      |
 | T- | Decrease Warmth     | Mid Brightness                      |
 
