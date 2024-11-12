@@ -8,7 +8,7 @@ Tested with the keylight model.
 ## Nix Flake
 ```shell
 $ nix run github:hughobrien/elgato-rs                                            
-Error: "Usage: elgato-rs http://elgato.lan:9123/elgato/lights <bright|dim|warm|cold>"
+Error: "Usage: elgato-rs http://elgato.lan:9123/elgato/lights <bright|dim|warm|cold|on|off|max>"
 
 $ nix run github:hughobrien/elgato-rs http://elgato.lan:9123/elgato/lights bright
 ```
@@ -17,7 +17,7 @@ $ nix run github:hughobrien/elgato-rs http://elgato.lan:9123/elgato/lights brigh
 ```shell
 $ cargo build --release
 $ ./target/release/elgato-rs
-Error: "Usage: elgato-rs http://elgato.lan:9123/elgato/lights <bright|dim|warm|cold>"
+Error: "Usage: elgato-rs http://elgato.lan:9123/elgato/lights <bright|dim|warm|cold|on|off|max>"
 
 $ ./target/release/elgato-rs http://elgato.lan:9123/elgato/lights bright
 ```
