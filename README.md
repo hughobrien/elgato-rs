@@ -10,7 +10,7 @@ Tested with the keylight model.
 $ nix run github:hughobrien/elgato-rs                                            
 Error: "Usage: elgato-rs http://keylight.lan <bright|dim|warm|cold|on|off|max>"
 
-$ nix run github:hughobrien/elgato-rs http://keylight.lan bright
+$ nix run github:hughobrien/elgato-rs http://keylight.lan max
 ```
 
 ## Build
@@ -19,7 +19,7 @@ $ cargo build --release
 $ ./target/release/elgato-rs
 Error: "Usage: elgato-rs http://keylight.lan: <bright|dim|warm|cold|on|off|max>"
 
-$ ./target/release/elgato-rs http://keylight.lan bright
+$ ./target/release/elgato-rs http://keylight.lan max
 ```
 
 ## Use
