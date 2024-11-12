@@ -25,7 +25,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     if let Some(mut light) = lights_response.lights.first().cloned() {
         adjust_brightness(&mut light, direction);
-        light.on = if light.brightness > 0 { 1 } else { 0 };
         
         let req_body = LightsResponse {
             numberOfLights: lights_response.numberOfLights,
@@ -59,5 +58,6 @@ fn adjust_brightness(light: &mut Light, direction: &str) {
         "down" => light.brightness = light.brightness.saturating_sub(STEP).max(0),
         _ => (),
     }
+    light.on = if light.brightness > 0 { 1 } else { 0 };
 }
 
