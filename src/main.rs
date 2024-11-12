@@ -45,8 +45,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn parse_args(args: Vec<String>) -> Result<(String, String), &'static str> {
-    const VALID_COMMANDS: &[&str] = &["bright", "dim", "warm", "cold", "on", "off", "max"];
-    let error_message = "Usage: elgato-rs http://keylight.lan <bright|dim|warm|cold|on|off|max>";
+    const VALID_COMMANDS: &[&str] = &[
+        "bright+", "bright-", "temp+", "temp-", "on", "off", "max", "min",
+    ];
+    let error_message =
+        "Usage: elgato-rs http://keylight.lan <bright+|bright-|temp+|temp-|on|off|max|min>";
 
     if args.len() == 3 {
         let url = args[1].clone();
@@ -65,50 +68,71 @@ fn parse_args(args: Vec<String>) -> Result<(String, String), &'static str> {
 
 fn adjust_light(light: &mut Light, command: &str) {
     const BRIGHTNESS_MAX: u8 = 100;
-    const BRIGHTNESS_MIN: u8 = 0;
+    const BRIGHTNESS_MIN: u8 = 2; // 1 seems to be 'off' also
+    const BRIGHTNESS_MID: u8 = 50;
+    const BRIGHTNESS_CHILL: u8 = 6;
 
     const TEMPERATURE_MAX: u16 = 344;
     const TEMPERATURE_MIN: u16 = 143;
     const TEMPERATURE_STEP: u16 = 10;
+    const TEMPERATURE_MAX_BRIGHTNESS: u16 = 250;
 
     // gamma-ish
     let brightness_step: u8 = if light.brightness <= 12 { 1 } else { 3 };
 
     match command {
-        "bright" => {
-            light.brightness = light
-                .brightness
-                .saturating_add(brightness_step)
-                .min(BRIGHTNESS_MAX)
-                .max(2); // 1 seems to be 'off' also
-            light.on = 1;
-        }
-        "dim" => {
-            light.brightness = light
-                .brightness
-                .saturating_sub(brightness_step)
-                .max(BRIGHTNESS_MIN); // redundant but consistent
-            if light.brightness <= 1 {
-                light.on = 0;
-                light.brightness = 0;
+        "bright+" => {
+            if light.on == 1 {
+                light.brightness = light
+                    .brightness
+                    .saturating_add(brightness_step)
+                    .min(BRIGHTNESS_MAX)
+                    .max(BRIGHTNESS_MIN);
+            } else {
+                light.on = 1;
             };
         }
-        "warm" => {
-            light.temperature = light
-                .temperature
-                .saturating_add(TEMPERATURE_STEP)
-                .min(TEMPERATURE_MAX);
+        "bright-" => {
+            if light.on == 1 {
+                light.brightness = light.brightness.saturating_sub(brightness_step);
+                if light.brightness < BRIGHTNESS_MIN {
+                    light.on = 0;
+                    light.brightness = 0;
+                };
+            } else {
+                light.on = 1;
+                light.brightness = BRIGHTNESS_CHILL;
+                light.temperature = TEMPERATURE_MAX;
+            };
         }
-        "cold" => {
-            light.temperature = light
-                .temperature
-                .saturating_sub(TEMPERATURE_STEP)
-                .max(TEMPERATURE_MIN);
+        "temp+" => {
+            if light.on == 1 {
+                light.temperature = light
+                    .temperature
+                    .saturating_add(TEMPERATURE_STEP)
+                    .min(TEMPERATURE_MAX);
+            } else {
+                light.on = 1;
+                light.brightness = BRIGHTNESS_MAX;
+                light.temperature = TEMPERATURE_MAX_BRIGHTNESS;
+            };
+        }
+        "temp-" => {
+            if light.on == 1 {
+                light.temperature = light
+                    .temperature
+                    .saturating_sub(TEMPERATURE_STEP)
+                    .max(TEMPERATURE_MIN);
+            } else {
+                light.on = 1;
+                light.brightness = BRIGHTNESS_MID;
+                light.temperature = TEMPERATURE_MAX_BRIGHTNESS;
+            };
         }
         "on" => {
             light.on = 1;
             if light.brightness == 0 {
-                light.brightness = 50;
+                light.brightness = BRIGHTNESS_MID;
             }
         }
         "off" => {
@@ -116,8 +140,13 @@ fn adjust_light(light: &mut Light, command: &str) {
         }
         "max" => {
             light.on = 1;
-            light.temperature = 250;
+            light.temperature = TEMPERATURE_MAX_BRIGHTNESS;
             light.brightness = BRIGHTNESS_MAX;
+        }
+        "min" => {
+            light.on = 1;
+            light.temperature = TEMPERATURE_MAX;
+            light.brightness = BRIGHTNESS_CHILL;
         }
         _ => (),
     }

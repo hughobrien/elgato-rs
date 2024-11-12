@@ -8,7 +8,7 @@ Tested with the keylight model.
 ## Nix Flake
 ```shell
 $ nix run github:hughobrien/elgato-rs                                            
-Error: "Usage: elgato-rs http://keylight.lan <bright|dim|warm|cold|on|off|max>"
+Error: "Usage: elgato-rs http://keylight.lan <bright+|bright-|warm|cold|on|off|max|min>"
 
 $ nix run github:hughobrien/elgato-rs http://keylight.lan max
 ```
@@ -17,7 +17,7 @@ $ nix run github:hughobrien/elgato-rs http://keylight.lan max
 ```shell
 $ cargo build --release
 $ ./target/release/elgato-rs
-Error: "Usage: elgato-rs http://keylight.lan: <bright|dim|warm|cold|on|off|max>"
+Error: "Usage: elgato-rs http://keylight.lan: <bright+|bright-|temp+|temp-|on|off|max|min>"
 
 $ ./target/release/elgato-rs http://keylight.lan max
 ```
@@ -29,16 +29,23 @@ Then in sway config file
 ```config
 set $elgato-rs /home/hugh/.bin/elgato-rs
 set $elgato-url http://keylight.lan
-bindsym --no-repeat $mod+Shift+Prior exec $elgato-rs $elgato-url bright
-bindsym --no-repeat $mod+Shift+Next exec $elgato-rs $elgato-url dim
-bindsym --no-repeat $mod+Shift+Home exec $elgato-rs $elgato-url warm
-bindsym --no-repeat $mod+Shift+End exec $elgato-rs $elgato-url cold
+bindsym --no-repeat $mod+Shift+Prior exec $elgato-rs $elgato-url bright+
+bindsym --no-repeat $mod+Shift+Next exec $elgato-rs $elgato-url bright-
+bindsym --no-repeat $mod+Shift+Home exec $elgato-rs $elgato-url temp+
+bindsym --no-repeat $mod+Shift+End exec $elgato-rs $elgato-url temp-
 ```
 
 Prior==PgUp and Next==PgDown.
 
 Now I hold down two modifier keys, and four of the keys in the island above the arrow keys become light controls.
 
+## Behaviour
+|    |     Light On        |     Light Off                       |
+|----|---------------------|-------------------------------------|
+| B+ | Increase Brightness | Turn Light On (previous brightness) |
+| B- | Decrease Brightness | Chill Brightness                    |
+| T+ | Increase Warmth     | Max Brightness                      |
+| T- | Decrease Warmth     | Mid Brightness                      |
 
 ## FAQ
 ### Does this support dark mode?
@@ -60,8 +67,8 @@ $ eza -l ./target/release/elgato-rs
 ### Have you benchmarked this?
 That would be insane
 ```
-$ hyperfine "./elgato-rs http://keylight.lan bright"
-Benchmark 1: ./elgato-rs http://keylight.lan bright
+$ hyperfine "./elgato-rs http://keylight.lan bright+"
+Benchmark 1: ./elgato-rs http://keylight.lan bright+
   Time (mean ± σ):     121.8 ms ±  21.3 ms    [User: 29.4 ms, System: 9.0 ms]
   Range (min … max):   100.6 ms … 171.0 ms    24 runs
 ```
@@ -69,8 +76,8 @@ Benchmark 1: ./elgato-rs http://keylight.lan bright
 ### Couldn't this have been a script?
 Yes, but it's intolerably slower.
 ```
-$ hyperfine "./elgato.py bright"
-Benchmark 1: python elgato.py bright
+$ hyperfine "./elgato.py bright+"
+Benchmark 1: python elgato.py bright+
 Time (mean ± σ):     330.7 ms ±  16.3 ms    [User: 198.4 ms, System: 22.5 ms]
 Range (min … max):   314.2 ms … 364.0 ms    10 runs
 ```
