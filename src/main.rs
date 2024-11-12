@@ -127,7 +127,7 @@ fn adjust_light(light: &mut Light, command: &str) {
             } else {
                 light.on = 1;
                 light.brightness = BRIGHTNESS_MID;
-                light.temperature = TEMPERATURE_MAX_BRIGHTNESS;
+                light.temperature = TEMPERATURE_MAX;
             };
         }
         "on" => {
