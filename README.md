@@ -7,8 +7,10 @@ Tested with the keylight model.
 
 ## Build
 ```shell
-cargo build --release
+$ cargo build --release
+$ ./target/release/elgato-rs
 Error: "Usage: elgato-rs http://elgato.lan:9123/elgato/lights <bright|dim|warm|cold>"
+$ ./target/release/elgato-rs http://elgato.lan:9123/elgato/lights bright
 ```
 
 ## Use
