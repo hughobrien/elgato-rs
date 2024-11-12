@@ -69,7 +69,13 @@ Time (mean ± σ):     330.7 ms ±  16.3 ms    [User: 198.4 ms, System: 22.5 ms]
 Range (min … max):   314.2 ms … 364.0 ms    10 runs
 ```
 
+### Has this been tested?
+Not in any way that someone asking that question would find acceptable.
+
+### How many software developers does it take to change a lightbulb?
+None, it's a hardware problem.
+
 ### How does this compare to the state of the art in Elgato Control?
-* It has 0.1% of the code (and therefore features) as [this Python library](https://github.com/frenck/python-elgato)
+* It has 6% of the code (and therefore features) as [this Python library](https://github.com/frenck/python-elgato)
 * It has no UI it just yells at you unlike [this nice system utility](https://github.com/mschneider82/keylight-control)
 * It has no support for advanced timeseries DB metrics like [this one](https://github.com/mdlayher/keylight_exporter)
