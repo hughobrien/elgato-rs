@@ -23,7 +23,7 @@ $ ./target/release/elgato-rs http://keylight.lan max
 ```
 
 ## Use
-My light has a static DHCP lease and a hosts file entry, sub in your own endpoint as needed.
+My light has a static DHCP lease and a hosts file entry, swap in your own endpoint as needed.
 
 Then in sway config file
 ```config
