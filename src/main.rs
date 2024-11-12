@@ -47,13 +47,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 fn parse_args(args: Vec<String>) -> Result<(String, String), &'static str> {
     const VALID_COMMANDS: &[&str] = &["bright", "dim", "warm", "cold", "on", "off", "max"];
     let error_message =
-        "Usage: elgato-rs http://elgato.lan:9123/elgato/lights <bright|dim|warm|cold|on|off|max>";
+        "Usage: elgato-rs http://keylight.lan <bright|dim|warm|cold|on|off|max>";
 
     if args.len() == 3 {
         let url = args[1].clone();
         let command = args[2].clone();
 
         if VALID_COMMANDS.contains(&command.as_str()) {
+            let url = format!("{}:9123/elgato/lights", url);
             Ok((url, command))
         } else {
             Err(error_message)

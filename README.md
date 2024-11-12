@@ -8,18 +8,18 @@ Tested with the keylight model.
 ## Nix Flake
 ```shell
 $ nix run github:hughobrien/elgato-rs                                            
-Error: "Usage: elgato-rs http://elgato.lan:9123/elgato/lights <bright|dim|warm|cold|on|off|max>"
+Error: "Usage: elgato-rs http://keylight.lan <bright|dim|warm|cold|on|off|max>"
 
-$ nix run github:hughobrien/elgato-rs http://elgato.lan:9123/elgato/lights bright
+$ nix run github:hughobrien/elgato-rs http://keylight.lan bright
 ```
 
 ## Build
 ```shell
 $ cargo build --release
 $ ./target/release/elgato-rs
-Error: "Usage: elgato-rs http://elgato.lan:9123/elgato/lights <bright|dim|warm|cold|on|off|max>"
+Error: "Usage: elgato-rs http://keylight.lan: <bright|dim|warm|cold|on|off|max>"
 
-$ ./target/release/elgato-rs http://elgato.lan:9123/elgato/lights bright
+$ ./target/release/elgato-rs http://keylight.lan bright
 ```
 
 ## Use
@@ -28,7 +28,7 @@ My light has a static DHCP lease and a hosts file entry, sub in your own endpoin
 Then in sway config file
 ```config
 set $elgato-rs /home/hugh/.bin/elgato-rs
-set $elgato-url http://elgato.lan:9123/elgato/lights
+set $elgato-url http://keylight.lan
 bindsym --no-repeat $mod+Shift+Prior exec $elgato-rs $elgato-url bright
 bindsym --no-repeat $mod+Shift+Next exec $elgato-rs $elgato-url dim
 bindsym --no-repeat $mod+Shift+Home exec $elgato-rs $elgato-url warm
@@ -57,8 +57,8 @@ $ eza -l ./target/release/elgato-rs
 ### Have you benchmarked this?
 That would be insane
 ```
-$ hyperfine "./elgato-rs http://elgato.lan:9123/elgato/lights bright"
-Benchmark 1: ./elgato-rs http://elgato.lan:9123/elgato/lights bright
+$ hyperfine "./elgato-rs http://keylight.lan bright"
+Benchmark 1: ./elgato-rs http://keylight.lan bright
   Time (mean ± σ):     121.8 ms ±  21.3 ms    [User: 29.4 ms, System: 9.0 ms]
   Range (min … max):   100.6 ms … 171.0 ms    24 runs
 ```
