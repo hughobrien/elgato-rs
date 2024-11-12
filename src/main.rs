@@ -17,39 +17,46 @@ struct LightsResponse {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let args: Vec<String> = env::args().collect();
-    if args.len() != 2 || !matches!(args[1].as_str(), "up" | "down") {
-        eprintln!("Usage: <program> <up|down>");
-        return Ok(());
-    }
-    let direction = &args[1];
-
+    let direction = parse_direction(env::args().collect())?;
     let url = "http://elgato.lan:9123/elgato/lights";
+
     let client = Client::new();
-
-    let res = client.get(url).send().await?;
-    let lights_response: LightsResponse = res.json().await?;
+    let lights_response = client.get(url).send().await?.json::<LightsResponse>().await?;
     
-    let mut light = lights_response.lights.first().cloned().ok_or("No lights found")?;
-    adjust_brightness(&mut light, direction);
-
-    light.on = if light.brightness > 0 { 1 } else { 0 };
-
-    let req_body = LightsResponse {
-        numberOfLights: lights_response.numberOfLights,
-        lights: vec![light],
-    };
-
-    client.put(url).json(&req_body).send().await?;
+    if let Some(mut light) = lights_response.lights.first().cloned() {
+        adjust_brightness(&mut light, direction);
+        light.on = if light.brightness > 0 { 1 } else { 0 };
+        
+        let req_body = LightsResponse {
+            numberOfLights: lights_response.numberOfLights,
+            lights: vec![light],
+        };
+        
+        client.put(url).json(&req_body).send().await?;
+    } else {
+        eprintln!("No lights found");
+    }
 
     Ok(())
 }
 
+fn parse_direction(args: Vec<String>) -> Result<&'static str, &'static str> {
+    if args.len() == 2 {
+        match args[1].as_str() {
+            "up" => Ok("up"),
+            "down" => Ok("down"),
+            _ => Err("Usage: <program> <up|down>"),
+        }
+    } else {
+        Err("Usage: <program> <up|down>")
+    }
+}
+
 fn adjust_brightness(light: &mut Light, direction: &str) {
-    let step = 3;
+    const STEP: u8 = 3;
     match direction {
-        "up" => light.brightness = light.brightness.saturating_add(step).min(100),
-        "down" => light.brightness = light.brightness.saturating_sub(step).max(0),
+        "up" => light.brightness = light.brightness.saturating_add(STEP).min(100),
+        "down" => light.brightness = light.brightness.saturating_sub(STEP).max(0),
         _ => (),
     }
 }
