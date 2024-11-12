@@ -17,11 +17,10 @@ struct LightsResponse {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let direction = parse_direction(env::args().collect())?;
-    let url = "http://elgato.lan:9123/elgato/lights";
-
+    let (url, direction) = parse_args(env::args().collect())?;
+    
     let client = Client::new();
-    let lights_response = client.get(url).send().await?.json::<LightsResponse>().await?;
+    let lights_response = client.get(&url).send().await?.json::<LightsResponse>().await?;
     
     if let Some(mut light) = lights_response.lights.first().cloned() {
         adjust_brightness(&mut light, direction);
@@ -31,7 +30,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             lights: vec![light],
         };
         
-        client.put(url).json(&req_body).send().await?;
+        client.put(&url).json(&req_body).send().await?;
     } else {
         eprintln!("No lights found");
     }
@@ -39,15 +38,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn parse_direction(args: Vec<String>) -> Result<&'static str, &'static str> {
-    if args.len() == 2 {
-        match args[1].as_str() {
-            "up" => Ok("up"),
-            "down" => Ok("down"),
-            _ => Err("Usage: <program> <up|down>"),
-        }
+fn parse_args(args: Vec<String>) -> Result<(String, &'static str), &'static str> {
+    if args.len() == 3 {
+        let url = args[1].clone();
+        let direction = match args[2].as_str() {
+            "up" => "up",
+            "down" => "down",
+            _ => return Err("Usage: <program> <url> <up|down>"),
+        };
+        Ok((url, direction))
     } else {
-        Err("Usage: <program> <up|down>")
+        Err("Usage: <program> <url> <up|down>")
     }
 }
 
