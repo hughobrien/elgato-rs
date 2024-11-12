@@ -41,6 +41,9 @@ Now I hold down two modifier keys, and four of the keys in the island above the 
 
 
 ## FAQ
+### Does this support dark mode?
+Stop it.
+
 ### How big is the binary?
 ```
 $ eza -l ./target/release/elgato-rs
@@ -64,7 +67,7 @@ Benchmark 1: ./elgato-rs http://elgato.lan:9123/elgato/lights bright
 Yes, but it's intolerably slower.
 ```
 $ hyperfine "./elgato.py bright"
-Benchmark 1: python elgato.py up
+Benchmark 1: python elgato.py bright
 Time (mean ± σ):     330.7 ms ±  16.3 ms    [User: 198.4 ms, System: 22.5 ms]
 Range (min … max):   314.2 ms … 364.0 ms    10 runs
 ```
