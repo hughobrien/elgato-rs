@@ -46,8 +46,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 fn parse_args(args: Vec<String>) -> Result<(String, String), &'static str> {
     const VALID_COMMANDS: &[&str] = &["bright", "dim", "warm", "cold", "on", "off", "max"];
-    let error_message =
-        "Usage: elgato-rs http://keylight.lan <bright|dim|warm|cold|on|off|max>";
+    let error_message = "Usage: elgato-rs http://keylight.lan <bright|dim|warm|cold|on|off|max>";
 
     if args.len() == 3 {
         let url = args[1].clone();
@@ -72,14 +71,16 @@ fn adjust_light(light: &mut Light, command: &str) {
     const TEMPERATURE_MIN: u16 = 143;
     const TEMPERATURE_STEP: u16 = 10;
 
-    let brightness_step: u8 = if light.brightness <= 10 { 1 } else { 3 };
+    // gamma-ish
+    let brightness_step: u8 = if light.brightness <= 12 { 1 } else { 3 };
 
     match command {
         "bright" => {
             light.brightness = light
                 .brightness
                 .saturating_add(brightness_step)
-                .min(BRIGHTNESS_MAX);
+                .min(BRIGHTNESS_MAX)
+                .max(2); // 1 seems to be 'off' also
             light.on = 1;
         }
         "dim" => {
@@ -87,8 +88,9 @@ fn adjust_light(light: &mut Light, command: &str) {
                 .brightness
                 .saturating_sub(brightness_step)
                 .max(BRIGHTNESS_MIN); // redundant but consistent
-            if light.brightness == 0 {
+            if light.brightness <= 1 {
                 light.on = 0;
+                light.brightness = 0;
             };
         }
         "warm" => {
