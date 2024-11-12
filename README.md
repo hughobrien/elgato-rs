@@ -42,7 +42,7 @@ Benchmark 1: ./elgato-rs http://elgato.lan:9123/elgato/lights bright
 ```
 
 ### Couldn't this have been a script?
-    Yes, but it's intolerably slower.
+Yes, but it's intolerably slower.
 ```
 $ hyperfine "./elgato.py bright"
 Benchmark 1: python elgato.py up
