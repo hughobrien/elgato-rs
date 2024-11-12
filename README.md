@@ -5,6 +5,11 @@ Intended to be bound to a keyboard shortcut.
 
 Tested with the keylight model.
 
+## Nix Flake
+```shell
+nix run github:hughobrien/elgato-rs
+```
+
 ## Build
 ```shell
 $ cargo build --release
