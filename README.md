@@ -8,7 +8,7 @@ Tested with the keylight model.
 ## Nix Flake
 ```shell
 $ nix run github:hughobrien/elgato-rs                                            
-Error: "Usage: elgato-rs http://keylight.lan <bright+|bright-|warm|cold|on|off|max|min>"
+Error: "Usage: elgato-rs http://keylight.lan <bright+|bright-|temp+|temp-|on|off|max|min>"
 
 $ nix run github:hughobrien/elgato-rs http://keylight.lan max
 ```
