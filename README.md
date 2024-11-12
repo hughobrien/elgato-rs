@@ -93,3 +93,31 @@ None, it's a hardware problem.
 * It has 6% of the code (and therefore features) as [this Python library](https://github.com/frenck/python-elgato).
 * It has no UI it just yells at you unlike [this nice system utility](https://github.com/mschneider82/keylight-control).
 * It has no support for advanced timeseries DB metrics like [this one](https://github.com/mdlayher/keylight_exporter).
+
+### Could this have been a shell function?
+Using [HTTPie](https://httpie.io/docs/cli).
+```bash
+elgato() {
+        URL="http://keylight.lan:9123/elgato/lights"
+        ELGATO=(http --timeout=10 PUT "${URL}")
+        if [[ "$1" = "0" ]]; then
+                "${ELGATO[@]}" "lights[0][on]:=0"
+                return
+        fi
+        # 1:lum: 1-100
+        # 2:hue: 143-344
+        set -x
+        "${ELGATO[@]}" \
+                "lights[0][on]:=1" \
+                "lights[0][brightness]:=$1" \
+                "lights[0][temperature]:=$((144 + ($2 * 2)))"
+}
+```
+
+### Could this have been a shell oneliner?
+Ick.
+```bash
+curl http://keylight.lan:9123/elgato/lights \
+    | jq -cr '.lights[] |= (.brightness = (.brightness - 3 | if . < 0 then 0 else . end) | .on = if .brightness == 0 then 0 else .on end)' \
+    | curl -X PUT -H "Content-Type: application/json" http://keylight.lan:9123/elgato/lights --data @-
+```
