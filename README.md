@@ -97,17 +97,17 @@ None, it's a hardware problem.
 ### Could this have been a shell function?
 Using [HTTPie](https://httpie.io/docs/cli).
 ```bash
-elgato() {
-        URL="http://keylight.lan:9123/elgato/lights"
-        ELGATO=(http --timeout=10 PUT "${URL}")
+keylight() {
+        # Usage: keylight x y, both 0-100, x=brightness
+        KEYLIGHT=(http PUT "http://keylight.lan:9123/elgato/lights")
         if [[ "$1" = "0" ]]; then
-                "${ELGATO[@]}" "lights[0][on]:=0"
+                "${KEYLIGHT[@]}" "lights[0][on]:=0"
                 return
         fi
-        # 1:lum: 1-100
-        # 2:hue: 143-344
+        # 1:bright: 1-100
+        # 2:temp: 143-344
         set -x
-        "${ELGATO[@]}" \
+        "${KEYLIGHT[@]}" \
                 "lights[0][on]:=1" \
                 "lights[0][brightness]:=$1" \
                 "lights[0][temperature]:=$((144 + ($2 * 2)))"
