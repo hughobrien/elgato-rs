@@ -53,3 +53,4 @@ Range (min … max):   314.2 ms … 364.0 ms    10 runs
 ### How does this compare to the state of the art in Elgato Control?
 * It [https://github.com/frenck/python-elgato](pales in comparison) to this Python library
 * It has no pretty UI compared to [https://github.com/mschneider82/keylight-control](this nice utility)
+* It does not support advanced timeseries DB metrics unlike [https://github.com/mdlayher/keylight_exporter](this one).
