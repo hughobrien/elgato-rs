@@ -27,14 +27,13 @@ My light has a static DHCP lease and a hosts file entry, sub in your own endpoin
 
 Then in sway config file
 ```config
-set $elgato-rs /home/hugh/.bin/elgato-rs
-set $elgato-url http://keylight.lan
-bindsym --no-repeat $mod+Shift+Prior exec $elgato-rs $elgato-url bright+
-bindsym --no-repeat $mod+Shift+Next exec $elgato-rs $elgato-url bright-
-bindsym --no-repeat $mod+Shift+Home exec $elgato-rs $elgato-url temp+
-bindsym --no-repeat $mod+Shift+End exec $elgato-rs $elgato-url temp-
-bindsym --no-repeat $mod+Shift+Alt+Prior exec $elgato-rs $elgato-url on
-bindsym --no-repeat $mod+Shift+Alt+Next exec $elgato-rs $elgato-url off
+set $elgato-rs /home/hugh/.bin/elgato-rs http://keylight.lan
+bindsym --no-repeat $mod+Shift+Prior exec $elgato-rs bright+
+bindsym --no-repeat $mod+Shift+Next exec $elgato-rs bright-
+bindsym --no-repeat $mod+Shift+Home exec $elgato-rs temp+
+bindsym --no-repeat $mod+Shift+End exec $elgato-rs temp-
+bindsym --no-repeat $mod+Shift+Alt+Prior exec $elgato-rs on
+bindsym --no-repeat $mod+Shift+Alt+Next exec $elgato-rs off
 ```
 
 Prior==PgUp and Next==PgDown.
@@ -67,7 +66,7 @@ $ eza -l ./target/release/elgato-rs
 ```
 
 ### Have you benchmarked this?
-That would be insane
+That would be insane.
 ```
 $ hyperfine "./elgato-rs http://keylight.lan bright+"
 Benchmark 1: ./elgato-rs http://keylight.lan bright+
@@ -91,6 +90,6 @@ Not in any way that someone asking that question would find acceptable.
 None, it's a hardware problem.
 
 ### How does this compare to the state of the art in Elgato Control?
-* It has 6% of the code (and therefore features) as [this Python library](https://github.com/frenck/python-elgato)
-* It has no UI it just yells at you unlike [this nice system utility](https://github.com/mschneider82/keylight-control)
-* It has no support for advanced timeseries DB metrics like [this one](https://github.com/mdlayher/keylight_exporter)
+* It has 6% of the code (and therefore features) as [this Python library](https://github.com/frenck/python-elgato).
+* It has no UI it just yells at you unlike [this nice system utility](https://github.com/mschneider82/keylight-control).
+* It has no support for advanced timeseries DB metrics like [this one](https://github.com/mdlayher/keylight_exporter).
