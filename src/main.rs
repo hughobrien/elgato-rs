@@ -1,4 +1,4 @@
-use reqwest::Client;
+use reqwest::blocking::Client;
 use serde::{Deserialize, Serialize};
 use std::env;
 
@@ -16,17 +16,11 @@ struct LightsResponse {
     lights: Vec<Light>,
 }
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let (url, command) = parse_args(env::args().collect())?;
 
     let client = Client::new();
-    let lights_response = client
-        .get(&url)
-        .send()
-        .await?
-        .json::<LightsResponse>()
-        .await?;
+    let lights_response = client.get(&url).send()?.json::<LightsResponse>()?;
 
     if let Some(mut light) = lights_response.lights.first().cloned() {
         adjust_light(&mut light, &command);
@@ -36,7 +30,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             lights: vec![light],
         };
 
-        client.put(&url).json(&req_body).send().await?;
+        client.put(&url).json(&req_body).send()?;
     } else {
         eprintln!("No lights found");
     }
